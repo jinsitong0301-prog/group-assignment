@@ -1,8 +1,66 @@
 #include <stdio.h>
+#define MAX 100
+
+void sort(int* arr,int n);
+int read_numbers(int* arr);
+void printf_numbers(const int* arr, int n);
+void run_sort();
 
 int main()
 {
-   printf("Hello");
+   char x='0';
+
+   printf("Hello\n");
    printf("Open Source SW Project\n");
    printf("Have a nice day\n');
-  }
+   printf("Want sort? >> ");
+   
+   scanf_s("%c", &x, 1);
+   if (x == 'y') run_sort();
+   else printf("  -End-");
+
+   return 0;
+}
+
+void run_sort() {
+	int arr[MAX];
+
+	printf("Enter any numbers >> ");
+	int n = read_numbers(arr);
+
+	sort(arr, n);
+	printf_numbers(arr, n);
+}
+
+
+
+int read_numbers(int* arr){
+	char x='0';
+	int n=0;
+
+	while (x != '\n') {
+		scanf_s("%d", &arr[n]);
+		scanf_s("%c", &x, 1);
+		n++;
+	}
+
+	return n;
+}
+
+void sort(int* arr, int n) {
+	for (int i = 0; i < n - 1; i++) {
+		for (int j = 0; j < n - 1 - i; j++) {
+			if (arr[j] > arr[j + 1]) {
+				int tmp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = tmp;
+			}
+		}
+	}
+}
+
+void printf_numbers(const int* arr, int n) {
+	for (int i = 0;i < n;i++) {
+		printf(" %d", arr[i]);
+	}
+}
