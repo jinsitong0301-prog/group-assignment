@@ -22,14 +22,31 @@ int main()
    return 0;
 }
 
-void run_sort() {
-	int arr[MAX];
+void run_sort(void)
+{
+    int arr[MAX];
+    char order;
+    int n;
 
-	printf("Enter any numbers >> ");
-	int n = read_numbers(arr);
+    printf("Ascending or descending? (a/d) >> ");
+    scanf_s(" %c", &order, 1);
 
-	sort(arr, n);
-	printf_numbers(arr, n);
+    if (order != 'a' && order != 'd') {
+        printf("Invalid choice.\n");
+        return;
+    }
+
+    printf("Enter any numbers >> ");
+    n = read_numbers(arr);
+
+    if (order == 'a') {
+        sort(arr, n);
+    }
+    else {
+        sort_descending(arr, n);
+    }
+
+    printf_numbers(arr, n);
 }
 
 
