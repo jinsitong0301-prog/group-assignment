@@ -77,4 +77,3 @@ void printf_numbers(const int* arr, int n) {
         printf("%d", arr[i]);
     }
 }
-   
