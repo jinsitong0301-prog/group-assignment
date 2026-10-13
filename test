@@ -12,7 +12,7 @@ int main()
 
    printf("Hello\n");
    printf("Open Source SW Project\n");
-   printf("Have a nice day\n');
+   printf("Have a nice day\n");
    printf("Want sort? >> ");
    
    scanf_s("%c", &x, 1);
