@@ -10,13 +10,13 @@ int main()
 {
    char x ='0';
    printf("Open Source SW Project\n");
-   printf("Have a nice day\n");
+   printf("Have a nice  day\n");
    printF("Want sort? >>");
    scanf_s("%c",&x, 1);
    if (x== 'y') run_sort();
    else printf(" -End-");
-   return 0;
-}
+   return 0 ;
+ }
 
 void run_sort(void)
 {
