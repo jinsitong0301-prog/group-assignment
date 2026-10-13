@@ -4,5 +4,5 @@ int main()
 {
    printf("Hello");
    printf("Open Source SW Project\n");
-
+   printf("Have a nice day\n');
   }
