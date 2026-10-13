@@ -8,13 +8,13 @@ void run_sort();
 
 int main()
 {
-   char x='0';
+   char x ='0';
    printf("Open Source SW Project\n");
    printf("Have a nice day\n");
    printF("Want sort? >>");
-   scanf_s("%c", &x, 1);
-   if (x == 'y') run_sort();
-   else printf("  -End-");
+   scanf_s("%c",&x, 1);
+   if (x== 'y') run_sort();
+   else printf(" -End-");
    return 0;
 }
 
