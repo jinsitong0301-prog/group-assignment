@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
-#include "screen.h"
+#include "tetris_screen.h"
 
 void screen_console(void) {
     system("chcp 65001>nul");//UTF-8로 설정(한글 오류 피함)
