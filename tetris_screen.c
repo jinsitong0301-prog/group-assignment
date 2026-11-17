@@ -84,3 +84,232 @@ MenuResult show_main_menu(Difficulty* diff) {
         }
     }
 }
+
+//=========
+// game screen
+//=========
+
+// blocks color
+int block_color(int value) {
+    int colors[] = {
+        7,
+        11,
+        14,
+        13,
+        10,
+        12,
+        9,
+        6
+    } ;
+    if (value < 1 || value > 7)
+        return 7;
+
+    return colors[value];
+}
+// difficult name
+const char* difficulty_name(Difficulty diff) {
+    switch (diff) {
+        case EASY: return "EASY";
+        case NORMAL: return "NORMAL";
+        case HARD: return "HARD";
+        default: return "NORMAL";
+    }
+}
+
+// game board
+void draw_cell(int x, int y, int value) {
+    gotoxy(x, y);
+
+    if (value == 0) {
+        set_color(8);
+        printf("  ");
+    }
+    else {
+        set_color(block_color(value));
+        printf("[]");
+    }
+
+    set_color(7);
+}
+
+// draw game screen
+void draw_game_screen(
+    const int board[20][10],
+    const int current[4][4],
+    int cur_x, int cur_y,
+    const int next[4][4],
+    int score,
+    int level,
+    int high_score,
+    Difficulty diff
+) {
+    int left = 2;
+    int top = 2;
+
+    // tieu de
+    gotoxy(30,0);
+    set_color(11);
+    printf("T E T R I S");
+    set_color(7);
+
+    // ve vien tren
+    gotoxy(left, top);
+    printf("+--------------------+");
+
+    // 10x20 board
+    for (int y = 0; y < 20; y++) {
+        gotoxy(left, top + y +1);
+        printf("|");
+
+        for (int x = 0; x < 10; x++) {
+            int value = board[y][x];
+
+            // hien thi khoi dang roi
+            int bx = x - cur_x;
+            int by = y - cur_y;
+
+            if (by >= 0 && bx < 4 &&
+                by >= 0 && bx < 4) {
+                    if (current[by][bx] != 0)
+                        value = current[by][bx];
+                }
+            draw_cell(left + 1 + x * 2,
+                      top + y + 1,
+                      value);
+        }
+        gotoxy(left + 21, top + y + 1);
+        printf("|");
+}
+//vien duoi
+gotoxy(left, top + 21);
+printf("+--------------------+");
+
+// information panel
+
+int sx = 29;
+
+// next block
+gotoxy(sx, 2);
+set_color(14);
+printf("NEXT BLOCK");
+set_color(7);
+
+for (int y = 0; y < 4; y++) {
+    for (int x = 0; x < 4; x++) {
+        int value = next[y][x];
+
+        draw_cell(sx + x * 2,
+                  4+y,
+                  value);
+    }
+}
+
+
+// score 
+gotoxy(sx, 10);
+set_color(11);
+printf("SCORE");
+set_color(7);
+
+gotoxy(sx, 11);
+printf("%-10d", score);
+
+// level
+gotoxy(sx, 13);
+set_color(11);
+printf("LEVEL");
+set_color(7);
+
+gotoxy(sx, 14);
+printf("%-10d", level);
+
+// high score
+gotoxy(sx, 16);
+set_color(14);
+printf("HIGH SCORE");
+set_color(7);
+
+gotoxy(sx, 17);
+printf("%-10d", high_score);
+
+// difficulty
+gotoxy(sx, 19);
+set_color(11);
+printf("DIFFICULTY");
+set_color(7);
+
+gotoxy(sx, 14);
+printf("%-10d", difficulty_name(diff));
+
+// control guide
+gotoxy(sx, 22);
+set_color(14);
+printf("CONTROLS");
+set_color(7);
+
+gotoxy(sx, 23);
+printf("Left : Move Left");
+
+gotoxy(sx, 24);
+printf("Right : Move Right");
+
+gotoxy(sx, 25);
+printf("Z     : Rolate Left");
+
+gotoxy(sx, 26);
+printf("X     : Rolate Right");
+
+set_color(7);
+}
+
+// game over screen
+int show_game_over(int score, int high_score, int new_record) {
+    int sel = 0;
+    
+    clear_screen();
+
+    while (1) {
+        set_color(12);
+        gotoxy(30, 5);
+        printf("===== GAME OVER =====");
+        set_color(7);
+
+        gotoxy(30, 8);
+        printf("FINAL SCORE : %d", score);
+
+        gotoxy(30, 10);
+        printf("HIGH SCORE : %d", high_score);
+
+        if (new_record) {
+            set_color(14);
+            gotoxy(30, 12);
+            printf("NEW HIGH SCORE!");
+            set_color(7);
+        }
+        
+        // restart
+        gotoxy(30, 16);
+        printf("%s Restart Game",
+                sel == 0 ? ">>" : " ");
+        
+        // main menu
+        gotoxy(30, 18);
+        printf("%s Main Menu",
+                sel == 1 ? ">>" : " ");
+
+        int key = _getch();
+
+        if (key == 224) {
+            key = _getch();
+
+            if (key == 72)
+                sel = (sel + 1) % 2;
+
+            else if (key == 80)
+                sel = (sel + 1) % 2;
+        }
+        else if (key == 13) {
+            return (sel == 0) ? 1 : 0;
+        }
+    }
+}

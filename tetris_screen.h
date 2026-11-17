@@ -12,4 +12,17 @@ void clear_screen(void);         // 화면 지우기
 
 MenuResult show_main_menu(Difficulty *diff);  // 메인 화면 출력, 선택 결과와 난이도 반환
 
+void draw_game_screen(
+    const int board[20][10],
+    const int current[4][4],
+    int cur_x, int cur_y,
+    const int next[4][4],
+    int score, 
+    int level,
+    int high_score,
+    Difficulty diff
+);
+
+// game over screen
+int show_game_over(int score, int high_score, int new_record);
 #endif
