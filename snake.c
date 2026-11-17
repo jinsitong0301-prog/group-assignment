@@ -1,14 +1,17 @@
-// snake.c
 #include <stdio.h>
 #include <conio.h>
 #include "snake.h"
-#include "tetris_screen.h"   // 临时借用公共函数，等贪吃蛇做好再换
+#include "snake_screen.h"
 
 void snake(void)
 {
-    clear_screen();
-    set_color(10);
-    gotoxy(30, 12);
-    printf("SNAKE GAME (COMMING SOON)");
-    _getch();
+    Difficulty diff = (Difficulty)1;  
+    snake_screen_console();
+
+    if (snake_show_main_menu(&diff) == SNAKE_START)
+        printf("Snake game start! difficulty: %d\n", diff);
+    else
+        printf("Back to home\n");
+
+    _getch();                       
 }
