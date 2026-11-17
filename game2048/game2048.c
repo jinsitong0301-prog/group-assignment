@@ -117,7 +117,14 @@ static int slide_left(void)
 // 보드를 시계 방향으로 90도 돌린다
 static void rotate(void)
 {
-    // TODO: 직접 작성
+    int tmp[N][N];
+    for (int r = 0;r < N;r++) 
+        for (int c = 0;c < N;c++)
+            tmp[c][N - 1 - r] = board[r][c];
+
+    for (int r = 0;r < N;r++)
+        for (int c = 0;c < N;c++)
+            board[r][c] = tmp[r][c];
 }
 
 // 보드를 turns번 돌린 뒤 왼쪽으로 밀고, 다시 원래 방향으로 돌려놓는다
@@ -125,9 +132,11 @@ static void rotate(void)
 // 움직였으면 1, 아니면 0을 돌려준다
 static int move_tiles(int turns)
 {
-    // TODO: 직접 작성
-    (void)turns;
-    return 0;
+    for (int i = 0;i < turns;i++)rotate();
+    int moved = slide_left();
+    for (int i = 0;i < (4 - turns) % 4;i++)rotate();
+
+    return moved;
 }
 
 /* ===== 3단계: 게임 진행 ===== */
@@ -144,13 +153,17 @@ void run_2048(void)
         draw();
         int key = _getch();
         if (key == 27) return;          // ESC
-        if (key == 0 || key == 224) {   // 방향키
+        if (key == 0 || key == 224) {
             key = _getch();
-            add_tile();                 // 임시: 5단계에서 이동으로 바꿀 자리
+            int moved = 0;
+            if (key == 75) moved = move_tiles(0);       // 왼쪽
+            else if (key == 80) moved = move_tiles(1);  // 아래
+            else if (key == 77) moved = move_tiles(2);  // 오른쪽
+            else if (key == 72) moved = move_tiles(3);  // 위
+            if (moved) add_tile();                      // 움직였을 때만 새 타일
         }
+              // 임시: 5단계에서 이동으로 바꿀 자리
+     
     }
-    // TODO: 직접 작성
-    // 1) 난수 초기화, 보드 초기화, 타일 2개 놓기
-    // 2) 반복: 보드 그리기 -> 키 입력 -> ESC면 끝
-    // 3) (5~6단계) 방향키면 움직이고, 움직였을 때만 새 타일
 }
+
