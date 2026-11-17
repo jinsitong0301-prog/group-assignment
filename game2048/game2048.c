@@ -80,8 +80,36 @@ static void add_tile(void) {
 // 하나라도 움직였으면 1, 아니면 0을 돌려준다
 static int slide_left(void)
 {
+    int moved = 0;
+
+    for (int r = 0;r < N;r++) {
+        int tmp[N] = { 0 };
+        int res[N] = { 0 };
+        int k = 0;
+
+        for (int c = 0;c < N;c++)
+            if (board[r][c] != 0)tmp[k++] = board[r][c];
+
+        for (int c = 0;c < N - 1;c++) {
+            if (tmp[c] != 0 && tmp[c] == tmp[c + 1]) {
+                tmp[c] *= 2;
+                score += tmp[c];
+                tmp[c + 1] = 0;
+            }
+        }
+
+        k = 0;
+        for (int c = 0;c < N;c++)
+            if (tmp[c] != 0)res[k++] = tmp[c];
+
+        for (int c = 0;c < N;c++) {
+            if (board[r][c] != res[c])moved = 1;
+            board[r][c] = res[c];
+        }
+    }
+
     // TODO: 직접 작성
-    return 0;
+    return moved;
 }
 
 /* ===== 5단계: 네 방향으로 움직이기 ===== */
