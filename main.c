@@ -1,4 +1,4 @@
-#include "game2048/game2048.h"
+#include "game2048.h"
 #include "Tetris.h"
 #include "tetris_screen.h"
 #include <stdio.h>
