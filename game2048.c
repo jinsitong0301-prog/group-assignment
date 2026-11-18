@@ -1,4 +1,4 @@
-﻿// game2048.c - 2048 게임
+\﻿// game2048.c - 2048 게임
 #define _CRT_SECURE_NO_WARNINGS   // Visual Studio가 일부 함수를 에러로 막지 않게 (include보다 위에)
 #include <stdio.h>
 #include <stdlib.h>
