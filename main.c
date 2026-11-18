@@ -1,3 +1,4 @@
+#include "game2048/game2048.h"
 #include "Tetris.h"
 #include "tetris_screen.h"
 #include <stdio.h>
@@ -44,6 +45,10 @@ int main(void)
             else if(sel==1){
                 snake();
             }//선택된 항목이 1이면 snake() 함수를 호출하여 스네이크 게임을 시작
+            else if(sel==2){
+                run_2048();
+            }
+            }//선택된 항목이 2이면 run_2048() 함수를 호출하여 2048 게임을 시작
             else if(sel==4){
                 break;
             }//선택된 항목이 4이면 프로그램 종료
