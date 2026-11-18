@@ -9,8 +9,7 @@
 #define N 4
 
 static int board[N][N];   // 4x4 보드. 0은 빈 칸
-static int score;         // 점수 (오늘은 쓰지 않아도 됨)
-
+static int score;         // 점수
 /* ===== 1단계: 보드 준비와 그리기 ===== */
 
 // 보드의 모든 칸을 0으로 만든다
