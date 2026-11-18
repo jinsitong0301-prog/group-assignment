@@ -1,5 +1,4 @@
 ﻿// game2048.c - 2048 게임
-// 뼈대(함수 이름과 할 일 주석): AI 작성 / 함수 안의 코드: 직접 작성
 #define _CRT_SECURE_NO_WARNINGS   // Visual Studio가 일부 함수를 에러로 막지 않게 (include보다 위에)
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,7 +48,7 @@ static void draw(void)
 
 /* ===== 2단계: 새 타일 놓기 ===== */
 
-// 빈 칸 중 하나를 무작위로 골라 2를 놓는다 (여유가 있으면 10% 확률로 4)
+// 빈 칸 중 하나를 무작위로 골라 4또는2를 놓는다 
 static void add_tile(void) {
     int empty = 0;
     for (int r = 0;r < N;r++)
@@ -70,7 +69,6 @@ static void add_tile(void) {
             }
         }
     }
-    // TODO: 직접 작성
 }
 
 /* ===== 4단계: 왼쪽으로 밀고 합치기 ===== */
@@ -107,8 +105,6 @@ static int slide_left(void)
             board[r][c] = res[c];
         }
     }
-
-    // TODO: 직접 작성
     return moved;
 }
 
@@ -162,8 +158,6 @@ void run_2048(void)
             else if (key == 72) moved = move_tiles(3);  // 위
             if (moved) add_tile();                      // 움직였을 때만 새 타일
         }
-              // 임시: 5단계에서 이동으로 바꿀 자리
-     
     }
 }
 
