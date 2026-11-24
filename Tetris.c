@@ -90,6 +90,7 @@ int clear_lines(int board[20][10]) {
 void tetris(void) {
     Difficulty diff = NORMAL;//시작 할 때에는 NORMAL
     screen_console();//게임 시작 전 콘솔 창 초기화
+while (1) {
 
     MenuResult r = show_main_menu(&diff);
     //show_main_menu(&diff):프로그램에 여기서 정지,버튼을 선택해야 계속
@@ -98,9 +99,12 @@ void tetris(void) {
         clear_screen();
         return;
     }
-    // 화면 지우기
-    clear_screen();
+    
     //
+    int restart = 0;
+do {
+    clear_screen();
+    
     int board[20][10] = {0};
 
     int current[4][4] = {0};
@@ -205,7 +209,7 @@ void tetris(void) {
                             int by = cur_y + y;
 
                             if (by >= 0 && by < 20 &&
-                                bx >= 0 && bx < 20) {
+                                bx >= 0 && bx < 10) {
                                     board[by][bx] = current[y][x]; // 현재 블록을 보드에 고정
                             }
                         }
@@ -251,6 +255,8 @@ void tetris(void) {
 
     clear_screen();
     
+    restart = 0;
+
     if (lost) {
         int new_record = 0;
 
@@ -259,9 +265,10 @@ void tetris(void) {
             new_record = 1;
         }
 
-        show_game_over(score, high_score, new_record);
+        restart = show_game_over(score, high_score, new_record);
     }
-    return;
+} while (restart);    
+}
 }
 
 // Create a random Tetris blocks (Tetrominoes)
