@@ -121,7 +121,10 @@ void tetris(void) {
 
     // Game Loop
     DWORD last_drop = GetTickCount();
-    int game_over = 0;
+    int game_over = 0; // 게임 루프를 중지
+    int lost = 0; // 패배로 인해 게임이 종료되는지 또는 플레이어가 스스로 종료하는지 확인
+    // ESC -> gameover =0; lost =0;
+    // 패배 -> gameover =1; lost =1;
 
     while (!game_over) {
         draw_game_screen(
@@ -237,7 +240,8 @@ void tetris(void) {
 
                 // Check Game Over
                 if (!can_move_tetris(board, current, cur_x, cur_y, 0, 0)) { // 새 블록이 시작 위치에 나타날 수 있는지 확인
-                    game_over = 1; // 새 블록이 원래 위치에 나타날 수 없으면 게임이 종료됨
+                    game_over = 1;
+                    lost = 1; // 새 블록이 원래 위치에 나타날 수 없으면 게임이 종료됨
                 }
             }
         }
@@ -246,6 +250,17 @@ void tetris(void) {
     }
 
     clear_screen();
+    
+    if (lost) {
+        int new_record = 0;
+
+        if (score > high_score) {
+            high_score = score;
+            new_record = 1;
+        }
+
+        show_game_over(score, high_score, new_record);
+    }
     return;
 }
 
