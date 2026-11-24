@@ -86,27 +86,27 @@ MenuResult show_main_menu(Difficulty* diff) {
 }
 
 //=========
-// game screen
+// GAME SCREEN
 //=========
 
 // blocks color
 int block_color(int value) {
     int colors[] = {
-        7,
-        11,
-        14,
-        13,
-        10,
-        12,
-        9,
-        6
+        7, // Empty
+        11, // I - Cyan 
+        14, // O - Yellow
+        13, // R - Purple
+        10, // S - Green
+        12, // Z - Red
+        9, // J - Blue
+        6 // L - Orange
     } ;
     if (value < 1 || value > 7)
-        return 7;
+        return 7; 
 
     return colors[value];
 }
-// difficult name
+// DIFFICULTY 
 const char* difficulty_name(Difficulty diff) {
     switch (diff) {
         case EASY: return "EASY";
@@ -146,13 +146,13 @@ void draw_game_screen(
     int left = 2;
     int top = 2;
 
-    // tieu de
+    // TITLE
     gotoxy(30,0);
     set_color(11);
     printf("T E T R I S");
     set_color(7);
 
-    // ve vien tren
+    // TOP BORDER
     gotoxy(left, top);
     printf("+--------------------+");
 
@@ -168,8 +168,8 @@ void draw_game_screen(
             int bx = x - cur_x;
             int by = y - cur_y;
 
-            if (by >= 0 && bx < 4 &&
-                by >= 0 && bx < 4) {
+            if (bx >= 0 && bx < 4 &&
+                by >= 0 && by < 4) {
                     if (current[by][bx] != 0)
                         value = current[by][bx];
                 }
@@ -180,13 +180,13 @@ void draw_game_screen(
         gotoxy(left + 21, top + y + 1);
         printf("|");
 }
-//vien duoi
+// LOWER BORBER
 gotoxy(left, top + 21);
 printf("+--------------------+");
 
 // information panel
 
-int sx = 29;
+int sx = 29; // 
 
 // next block
 gotoxy(sx, 2);
@@ -205,7 +205,7 @@ for (int y = 0; y < 4; y++) {
 }
 
 
-// score 
+// SCORE
 gotoxy(sx, 10);
 set_color(11);
 printf("SCORE");
@@ -214,7 +214,7 @@ set_color(7);
 gotoxy(sx, 11);
 printf("%-10d", score);
 
-// level
+// LEVEL
 gotoxy(sx, 13);
 set_color(11);
 printf("LEVEL");
@@ -223,7 +223,7 @@ set_color(7);
 gotoxy(sx, 14);
 printf("%-10d", level);
 
-// high score
+// HIGH SCORE
 gotoxy(sx, 16);
 set_color(14);
 printf("HIGH SCORE");
@@ -232,16 +232,16 @@ set_color(7);
 gotoxy(sx, 17);
 printf("%-10d", high_score);
 
-// difficulty
+// DIFFICULTY
 gotoxy(sx, 19);
 set_color(11);
 printf("DIFFICULTY");
 set_color(7);
 
-gotoxy(sx, 14);
-printf("%-10d", difficulty_name(diff));
+gotoxy(sx, 20);
+printf("%-10s", difficulty_name(diff));
 
-// control guide
+// CONTROL GUIDE
 gotoxy(sx, 22);
 set_color(14);
 printf("CONTROLS");
@@ -262,7 +262,7 @@ printf("X     : Rolate Right");
 set_color(7);
 }
 
-// game over screen
+// GAME OVER SCREEN
 int show_game_over(int score, int high_score, int new_record) {
     int sel = 0;
     
@@ -309,7 +309,7 @@ int show_game_over(int score, int high_score, int new_record) {
                 sel = (sel + 1) % 2;
         }
         else if (key == 13) {
-            return (sel == 0) ? 1 : 0;
+            return (sel == 0) ? 1 : 0;  // Restart Game or Main Menu
         }
     }
 }
