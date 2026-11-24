@@ -201,8 +201,8 @@ void Minesweeper(void)
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = hInstance;
-    wc.hIcon = LoadIconW(NULL, IDI_APPLICATION);
-    wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
+    wc.hIcon = LoadIconA(NULL, IDI_APPLICATION);
+    wc.hCursor = LoadCursorA(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszMenuName = NULL;
     wc.lpszClassName = className;
