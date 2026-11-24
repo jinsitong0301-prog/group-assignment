@@ -1,6 +1,7 @@
 #include "game2048.h"
 #include "Tetris.h"
 #include "tetris_screen.h"
+#include "Minesweeper.h"
 #include <stdio.h>
 #include <conio.h>
 #include "snake.h"
