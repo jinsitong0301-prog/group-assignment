@@ -3,6 +3,35 @@
 #include "Tetris.h"
 #include "tetris_screen.h"
 
+// 충돌 검사 기능
+int can_move_tetris(
+    int board[20][10],
+    int current[4][4],
+    int cur_x,
+    int cur_y,
+    int dx,
+    int dy
+) {
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            if (current[y][x] == 0)
+                continue;
+            
+            int new_x = cur_x + x + dx;
+            int new_y = cur_y + y + dy;
+
+            // check left, right and bottom borders
+            if (new_x < 0 || new_x >= 10 || new_y >= 20) //  블록이 플레이 영역 밖으로 나가는 것을 방지
+                return 0;
+            
+            // check collision with fixed blocks
+            if (new_y >= 0 && board[new_y][new_x] != 0) // 고정된 블록과 겹치지 않도록함
+                return 0;
+        }
+    }
+    return 1;
+}
+
 void tetris(void) {
     Difficulty diff = NORMAL;//시작 할 때에는 NORMAL
     screen_console();//게임 시작 전 콘솔 창 초기화
