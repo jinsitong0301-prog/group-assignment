@@ -50,7 +50,7 @@ int main(void)
                 run_2048();
             }//선택된 항목이 2이면 run_2048() 함수를 호출하여 2048 게임을 시작
             else if(sel==3){
-                MINESWEEPER();
+                Minesweeper();
             }
             else if(sel==4){
                 break;
