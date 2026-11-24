@@ -35,6 +35,58 @@ int can_move_tetris(
     return 1;
 }
 
+void generate_piece(int piece[4][4]); // 함수 선언
+
+// Rotate block clockwise
+void rotate_piece(int current[4][4], int rotated[4][4]) {
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            rotated[x][3 - y] = current[y][x]; // 시계 방향으로 90° 회전
+        }
+    }
+}
+
+// Clear completed lines
+int clear_lines(int board[20][10]) {
+
+    int lines = 0;
+
+    for(int y = 19; y >= 0; y--) {
+
+        int full = 1;
+
+        // Check whether the row is full
+        for (int x = 0; x < 10; x++) {
+            if (board[y][x] == 0) {
+                full = 0;
+                break;
+            }
+        }
+
+        // Clear the full row
+        if (full) {
+            lines++;
+
+            // Move rows above down
+            for (int row = y; row > 0; row--) {
+                for (int x = 0; x < 10; x++) {
+                    board[row][x] = board[row - 1][x];
+                }
+            }
+
+            // Clear the top row
+            for (int x = 0; x < 10; x++) {
+                board[0][x] = 0;
+            }
+
+            // Check the same row again
+            y++;
+        }
+    }
+    return lines;
+}
+
 void tetris(void) {
     Difficulty diff = NORMAL;//시작 할 때에는 NORMAL
     screen_console();//게임 시작 전 콘솔 창 초기화
@@ -105,6 +157,21 @@ void tetris(void) {
                     if (can_move_tetris(board, current, cur_x, cur_y, 0, 1))
                         cur_y++;
                 }
+                else if (key == 72) {
+                    int rotated[4][4] = {0};
+
+                    rotate_piece(current, rotated);
+
+                    if (can_move_tetris(board, rotated, cur_x, cur_y, 0, 0)) {
+
+                        for (int y = 0; y < 4; y++) {
+                            for (int x = 0; x < 4; x++) {
+                                current[y][x] = rotated[y][x];
+                            }
+
+                        }
+                    }
+                }
             }
             //Exit Game
             else if (key == 27) { // Esc - Exit the game
@@ -142,6 +209,17 @@ void tetris(void) {
                     }
 
                 }
+                // Clear lines and update score
+                int lines = clear_lines(board);
+                
+                if (lines == 1)
+                    score += 100;
+                else if (lines == 2)
+                    score += 300;
+                else if (lines == 3)
+                    score += 500;
+                else if (lines == 4) 
+                    score += 800;
             
                 // Move next block to current
                 for (int y = 0; y < 4; y++) {
@@ -212,7 +290,7 @@ void generate_piece(int piece[4][4]) {
         // J
         {
             {0, 0, 6, 0},
-            {6, 6, 6, 6},
+            {6, 6, 6, 0},
             {0, 0, 0, 0},
             {0, 0, 0, 0},
         },
