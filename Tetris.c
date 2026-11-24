@@ -2,6 +2,9 @@
 #include <conio.h>
 #include "Tetris.h"
 #include "tetris_screen.h"
+#include <windows.h>
+#include <stdlib.h>
+#include <time.h>
 
 // 충돌 검사 기능
 int can_move_tetris(
@@ -48,19 +51,11 @@ void tetris(void) {
     //
     int board[20][10] = {0};
 
-    int current[4][4] = {
-        {0, 1, 0, 0},
-        {1, 1, 1, 0},
-        {0, 0, 0, 0},
-        {0, 0, 0, 0}   
-    };
+    int current[4][4] = {0};
+    int next[4][4] = {0};
 
-    int next[4][4] = {
-        {2, 2, 0, 0},
-        {2, 2, 0, 0},
-        {0, 0, 0, 0},
-        {0, 0, 0, 0}
-    };
+    generate_piece(current);
+    generate_piece(next);
 
     int cur_x = 3;
     int cur_y = 0;
@@ -68,8 +63,15 @@ void tetris(void) {
     int score = 0;
     int level = 1;
     int high_score = 0;
+
+    // Random Seed
+    srand((unsigned int)time(NULL));
+
     // Game Loop
-    while (1) {
+    DWORD last_drop = GetTickCount();
+    int game_over = 0;
+
+    while (!game_over) {
         draw_game_screen(
         board,
         current,
@@ -80,32 +82,154 @@ void tetris(void) {
         level,
         high_score,
         diff
-    );
+        );
+        // Keyboard input
+        if(_kbhit()) { // 방금 키보드의 아무 키나 눌렀는지 확인 - 키가 없으면 확인하고 계속 실행
+            int key = _getch(); //  Enter 없이 누른 키를 읽음
+             // Arrow keys
+            if (key == 224 || key == 0) { // 화살표 키 입력
+                key = _getch();
 
-        int key = _getch(); //  Enter 없이 누른 키를 읽음
+                // Left
+                if (key == 75) { // <--
+                    if (can_move_tetris(board, current, cur_x, cur_y, -1, 0))
+                        cur_x--;
+                }
+                // Right
+                else if (key == 77) { // -->
+                    if (can_move_tetris(board, current, cur_x, cur_y, 1, 0)) 
+                        cur_x++;
+                }
+                // Down
+                else if (key == 80) { // 아래쪽 키 사용하여 떨어지는 블록을 더 빠르게 밀어냅
+                    if (can_move_tetris(board, current, cur_x, cur_y, 0, 1))
+                        cur_y++;
+                }
+            }
+            //Exit Game
+            else if (key == 27) { // Esc - Exit the game
+                game_over = 1;
+            }
 
-        //Exit Game
-        if (key == 27) { // Esc - Exit the game
-            break;
         }
 
-        // Arrow keys
-        if (key == 224 || key == 0) { // 화살표 키 입력
-            key = _getch();
+        // Automatic falling
+        DWORD now = GetTickCount(); //  현재 시스템 시간(밀리초)을 가져옴
 
-            // Left
-            if (key == 75) { // <--
-                if (can_move_tetris(board, current, cur_x, cur_y, -1, 0))
-                    cur_x--;
+        if (now - last_drop >= 500) { // 두 테스트 사이의 시간 간격을 계산 // 500ms=0.5s
+                                    // 블록은 0.5초마다 자동으로 한 칸씩 떨어집
+            last_drop = now; // 타임라인 업데이트
+
+            // Move Down
+            if (can_move_tetris(board, current, cur_x, cur_y, 0, 1)) {
+                cur_y++;
             }
-            // Right
-            else if (key == 77) { // -->
-                if (can_move_tetris(board, current, cur_x, cur_y, 1, 0)) 
-                    cur_x++;
+            
+            // Cannot move down -> lock block (블록 고정).
+            else {
+                for (int y = 0; y < 4; y++) {
+                    for (int x = 0; x < 4; x++) {
+                        if (current[y][x] != 0) {
+
+                            int bx = cur_x + x;
+                            int by = cur_y + y;
+
+                            if (by >= 0 && by < 20 &&
+                                bx >= 0 && bx < 20) {
+                                    board[by][bx] = current[y][x]; // 현재 블록을 보드에 고정
+                            }
+                        }
+                    }
+
+                }
+            
+                // Move next block to current
+                for (int y = 0; y < 4; y++) {
+                    for (int x = 0; x < 4; x++) {
+                        current[y][x] = next[y][x];
+                    }
+                }
+
+                // Create new next block
+                generate_piece(next); // 새로운 블록 모양을 만들고 다음 배열에 저장
+
+                // Reset position
+                cur_x = 3;
+                cur_y = 0;
+
+                // Check Game Over
+                if (!can_move_tetris(board, current, cur_x, cur_y, 0, 0)) { // 새 블록이 시작 위치에 나타날 수 있는지 확인
+                    game_over = 1; // 새 블록이 원래 위치에 나타날 수 없으면 게임이 종료됨
+                }
             }
         }
+        Sleep(30); // 일정 시간 동안 프로그램을 중지(0.03s) (각 루프가 끝나면 프로그램은 다음 루프를 계속하기 전에 약 30ms 동안 일시 중지됩)
+                // Game Loop의 반복 속도 조정
     }
 
     clear_screen();
     return;
+}
+
+// Create a random Tetris blocks (Tetrominoes)
+void generate_piece(int piece[4][4]) {
+    int shapes[7][4][4] = {
+        // I
+        {
+            {1, 1, 1, 1},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0}
+        },
+        // O
+        {
+            {2, 2, 0, 0},
+            {2, 2, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
+        // T
+        {
+            {0, 3, 0, 0},
+            {3, 3, 3, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
+        // S
+        {
+            {0, 4, 4, 0},
+            {4, 4, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
+        // Z
+        {
+            {5, 5, 0, 0},
+            {0, 5, 5, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
+        // J
+        {
+            {0, 0, 6, 0},
+            {6, 6, 6, 6},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
+        // L
+        {
+            {7, 0, 0, 0},
+            {7, 7, 7, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        }
+    };
+
+    int type = rand() % 7;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            piece[y][x] = shapes[type][y][x];
+        }
+    }
 }
