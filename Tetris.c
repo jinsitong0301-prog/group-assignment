@@ -68,8 +68,9 @@ void tetris(void) {
     int score = 0;
     int level = 1;
     int high_score = 0;
-    //
-    draw_game_screen(
+    // Game Loop
+    while (1) {
+        draw_game_screen(
         board,
         current,
         cur_x,
@@ -81,12 +82,30 @@ void tetris(void) {
         diff
     );
 
-    // 
-    _getch();
+        int key = _getch(); //  Enter 없이 누른 키를 읽음
+
+        //Exit Game
+        if (key == 27) { // Esc - Exit the game
+            break;
+        }
+
+        // Arrow keys
+        if (key == 224 || key == 0) { // 화살표 키 입력
+            key = _getch();
+
+            // Left
+            if (key == 75) { // <--
+                if (can_move_tetris(board, current, cur_x, cur_y, -1, 0))
+                    cur_x--;
+            }
+            // Right
+            else if (key == 77) { // -->
+                if (can_move_tetris(board, current, cur_x, cur_y, 1, 0)) 
+                    cur_x++;
+            }
+        }
+    }
 
     clear_screen();
-
-    //if (r == START) printf("게임 시작! 난이도: %d\n", diff);
-    //else printf("홈으로 돌아가기\n");
     return;
 }
