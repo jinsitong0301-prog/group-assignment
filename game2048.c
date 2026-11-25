@@ -323,7 +323,7 @@ static int play_game(void)
             sprintf(text, "GAME OVER!  SCORE: %d", score);
             show_message(0, 12, text);
             if (new_best) show_message(1, 14, "*** NEW BEST SCORE! ***");   // 노란 글자 + 별표
-            show_message(2, 7, "R: try again    ESC: back to 2048 menu");
+            show_message(2, 7, "R: try again    Esc: back to 2048 menu");
             while (1) {
                 int key = _getch();
                 if (key == 'r' || key == 'R') return 1;
