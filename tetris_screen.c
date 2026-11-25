@@ -87,19 +87,19 @@ MenuResult show_main_menu(Difficulty* diff) {
 
 //=========
 // game screen
-//=========
+//========
 
 // blocks color
 int block_color(int value) {
     int colors[] = {
-        7,
-        11,
-        14,
-        13,
-        10,
-        12,
-        9,
-        6
+        7, // empty
+        11, // I-cyan
+        14, // O- yellow
+        13, // T- purple
+        10, // S- green
+        12, // Z- red
+        9, // J- blue
+        6 // L- orange
     } ;
     if (value < 1 || value > 7)
         return 7;
@@ -297,7 +297,7 @@ int show_game_over(int score, int high_score, int new_record) {
         printf("%s Main Menu",
                 sel == 1 ? ">>" : " ");
 
-        int key = _getch();
+        int key =_getch();
 
         if (key == 224) {
             key = _getch();
