@@ -255,10 +255,10 @@ gotoxy(sx, 24);
 printf("Right : Move Right");
 
 gotoxy(sx, 25);
-printf("Z     : Rolate Left");
+printf("Up    : Rolate Right");
 
 gotoxy(sx, 26);
-printf("X     : Rolate Right");
+printf("Down  : Soft Drop");
 
 set_color(7);
 }
