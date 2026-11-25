@@ -88,6 +88,10 @@ MenuResult show_main_menu(Difficulty* diff) {
 //=========
 // game screen
 //========
+=======
+// GAME SCREEN
+//=========
+>>>>>>> d5d0936ac32005ba7703e76da9a115e1f638e077
 
 // blocks color
 int block_color(int value) {
