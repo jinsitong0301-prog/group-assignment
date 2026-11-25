@@ -87,6 +87,20 @@ int clear_lines(int board[20][10]) {
     return lines;
 }
 
+// Drop speed according yo difficulty
+int get_drop_interval(Difficulty diff) {
+    switch (diff) {
+        case EASY:
+            return 800;
+        case NORMAL:
+            return 500;
+        case HARD:
+            return 250;
+        default:
+            return 500;
+    }
+}
+
 void tetris(void) {
     Difficulty diff = NORMAL;//시작 할 때에는 NORMAL
     screen_console();//게임 시작 전 콘솔 창 초기화
@@ -190,8 +204,7 @@ do {
         // Automatic falling
         DWORD now = GetTickCount(); //  현재 시스템 시간(밀리초)을 가져옴
 
-        if (now - last_drop >= 500) { // 두 테스트 사이의 시간 간격을 계산 // 500ms=0.5s
-                                    // 블록은 0.5초마다 자동으로 한 칸씩 떨어집
+        if (now - last_drop >= get_drop_interval(diff)) { // 두 테스트 사이의 시간 간격을 계산 // 
             last_drop = now; // 타임라인 업데이트
 
             // Move Down
