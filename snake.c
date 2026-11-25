@@ -68,7 +68,7 @@ static int sn_play(Difficulty diff) {
     static const int dx[4] = { 0, 0, -1, 1 };       // UP, DOWN, LEFT, RIGHT
     static const int dy[4] = { -1, 1, 0, 0 };
     SnDir dir = SN_RIGHT, next = SN_RIGHT;// 현재 이동 방향, 다음 이동 방향
-    int win = 0;
+    int win = 0;// 승리 여부, 1이면 승리, 0이면 패배
 
     // 초기화: 길이 3, 화면 가운데에서 오른쪽으로 출발
     sn_len = 3;
@@ -154,10 +154,10 @@ static int sn_play(Difficulty diff) {
 
     // 게임 종료 화면
     int cy = SN_OY + SN_H / 2;// 화면 중앙 y 좌표
-    snake_set_color(win ? 14 : 12);
+    snake_set_color(win ? 14 : 12);// 승리: 노란색, 패배: 빨간색
     snake_gotoxy(35, cy);
     printf("%s", win ? " YOU WIN! " : " GAME OVER ");
-    snake_set_color(7);
+    snake_set_color(7);// 원래 색으로
     snake_gotoxy(35, cy + 1);
     printf(" SCORE: %d ", sn_score);
     snake_gotoxy(28, cy + 3);
